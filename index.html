@@ -1,76 +1,20 @@
 <!DOCTYPE html>
-<svg width="960" height="500"></svg>
-<style>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>D3.js Base</title>
+	<style>
+		svg{
+			border: 1px solid black;
+		}
+		rect{
+			fill: pink;
+		}
+	</style>
+	<script src="//d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+	<script type="text/javascript" src="index.js"></script>
+</body>
 
-</style>
-
-<script src="//d3js.org/d3.v5.min.js"></script>
-<script>
-
-	var width = 800;
-	var height = 600;
-
-	var margin = {
-		top: 20,
-		right: 20,
-		bottom: 30,
-		left: 100
-	};
-
-	var innerWidth = width - margin.left - margin.right;
-	var innerHeight = height - margin.top - margin.bottom;
-
-	var svg = d3.select("svg")
-		.attr('width', width)
-		.attr('height', height)
-		.append('g')
-		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-	var x = d3.scaleLinear();
-	var y = d3.scaleLinear();
-
-	d3.csv('dots.csv', function (d) {
-		return {
-			posx: +d.posx,
-			posy: +d.posy,
-			val: +d.val
-		};
-	}).then(function (data) {
-
-		console.log(data);
-
-		var maxX = d3.max(data, function (d) {
-			return d.posx;
-		});
-		var maxY = d3.max(data, function (d) {
-			return d.posy;
-		});
-		console.log(maxX, maxY);
-
-		x.domain([0, maxX]).range([0, innerWidth]);
-		y.domain([0, maxY]).range([0, innerHeight]);
-
-		svg.selectAll('circle')
-			.data(data)
-			.enter()
-			.append('circle')
-			.attr('cx', function (d) {
-				return x(d.posx);
-			})
-			.attr('cy', function (d) {
-				return y(d.posy);
-			})
-			.attr('r', function (d) {
-				return d.val;
-			})
-			.style('fill', function (d) {
-				var r = Math.random() * 255;
-				var g = Math.random() * 255;
-				var b = Math.random() * 255;
-				return 'rgb(' + r + ',' + g + ',' + b + ')';
-			});
-
-
-	});
-
-</script>
+</html>
