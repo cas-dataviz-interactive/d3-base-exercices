@@ -18,6 +18,7 @@ d3.csv('pigeons_short.csv', function (d) {
         breeder: d.breeder,
         id: +d.id,
         speed: +d.speed,
+        name: d.name,
         lat: +d.lat,
         lon: +d.lon
     };
@@ -30,12 +31,17 @@ d3.csv('pigeons_short.csv', function (d) {
         .append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    var y = d3.scaleLinear()
-        .domain([27, 50])
-        .range([0, innerHeight]);
+    var names = d3.set(data,function(d){
+        return d.name;
+    }).values();
+
+    var y = d3.scaleBand()
+        .domain(names)
+        .range([0, innerHeight])
+        .paddingInner(0.1);
 
     var x = d3.scaleLinear()
-        .domain([-120, -80])
+        .domain([0, 200])
         .range([0, innerWidth]);
 
     var breeders = d3.set(data, function (d) {
@@ -48,28 +54,18 @@ d3.csv('pigeons_short.csv', function (d) {
 
     svg.selectAll("circle")
         .data(data)
-        .join('circle')
-        .attr('cx', function (d, i) {
-            return x(d.lon);
+        .join('rect')
+        .attr('x', 0)
+        .attr('y', function (d, i) {
+            return y(d.name);
         })
-        .attr('cy', function (d, i) {
-            return y(d.lat);
+        .attr('width', function (d, i) {
+            return x(d.speed);
         })
-        .attr('r', function (d, i) {
-            return 0.3 * d.speed;
-        })
+        .attr('height', y.bandwidth())
         .style('fill', function (d) {
             return col(d.breeder);
-        })
-        .on('mouseover', function (d) {
-            d3.select(this).style('fill', 'red');
-            d3.select(this).transition().attr('r',0.3 * d.speed+20);
-        })
-        .on('mouseout', function (d) {
-            d3.select(this).attr('fill', 'black');
-            d3.select(this).transition().attr('r',0.3 * d.speed);
-            d3.select(this).style('fill', col(d.breeder));
-        })
+        });
 
     var yaxis = d3.axisLeft(y);
     d3.select('body').select('svg')
