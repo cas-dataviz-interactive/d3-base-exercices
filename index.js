@@ -20,7 +20,6 @@ d3.csv('pigeons_short.csv', function (d) {
         .domain([-120, -80])
         .range([0, 800]);
 
-
     svg.selectAll("circle")
         .data(data)
         .join('circle')
