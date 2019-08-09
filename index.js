@@ -60,7 +60,16 @@ d3.csv('pigeons_short.csv', function (d) {
         })
         .style('fill', function (d) {
             return col(d.breeder);
-        });
+        })
+        .on('mouseover', function (d) {
+            d3.select(this).style('fill', 'red');
+            d3.select(this).transition().attr('r',0.3 * d.speed+20);
+        })
+        .on('mouseout', function (d) {
+            d3.select(this).attr('fill', 'black');
+            d3.select(this).transition().attr('r',0.3 * d.speed);
+            d3.select(this).style('fill', col(d.breeder));
+        })
 
     var yaxis = d3.axisLeft(y);
     d3.select('body').select('svg')
