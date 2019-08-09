@@ -1,5 +1,8 @@
+var colors = ['#23AD7B', '#26303D', '#FF714F', '#FFCC63'];
+
 d3.csv('pigeons_short.csv', function (d) {
     return {
+        breeder: d.breeder,
         id: +d.id,
         speed: +d.speed,
         lat: +d.lat,
@@ -12,13 +15,21 @@ d3.csv('pigeons_short.csv', function (d) {
         .attr("width", 800)
         .attr("height", 600);
 
-    var y= d3.scaleLinear()
+    var y = d3.scaleLinear()
         .domain([27, 50])
         .range([0, 600]);
 
     var x = d3.scaleLinear()
         .domain([-120, -80])
         .range([0, 800]);
+
+    var breeders = d3.set(data, function (d) {
+        return d.breeder;
+    }).values();
+
+    var col = d3.scaleOrdinal()
+        .domain(breeders)
+        .range(colors);
 
     svg.selectAll("circle")
         .data(data)
@@ -30,7 +41,10 @@ d3.csv('pigeons_short.csv', function (d) {
             return y(d.lat);
         })
         .attr('r', function (d, i) {
-            return 0.3*d.speed;
+            return 0.3 * d.speed;
+        })
+        .style('fill', function (d) {
+            return col(d.breeder);
         });
 
 });
