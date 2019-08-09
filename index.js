@@ -62,4 +62,18 @@ d3.csv('pigeons_short.csv', function (d) {
             return col(d.breeder);
         });
 
+    var yaxis = d3.axisLeft(y);
+    d3.select('body').select('svg')
+        .append('g')
+        .classed('yaxis', true)
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+        .call(yaxis);
+
+    var xaxis = d3.axisBottom(x);
+    d3.select('body').select('svg')
+        .append('g')
+        .classed('xaxis', true)
+        .attr('transform', 'translate(' + margin.left + ',' + (height - margin.bottom) + ')')
+        .call(xaxis);
+
 });
